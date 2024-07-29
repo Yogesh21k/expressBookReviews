@@ -7,7 +7,9 @@ const regd_users = express.Router();
 let users = [];
 
 const isValid = (username)=>{ 
-  let userwithsameusername=users.filter((user)=>user.username===username);
+  let userwithsameusername=users.filter((user)=>{
+    return(user.username===username);
+  })
   if(userwithsameusername>0){
     return true
   }
@@ -17,7 +19,9 @@ const isValid = (username)=>{
 }
 
 const authenticatedUser = (username,password)=>{ 
-  let userisvalid=users.filter((user)=>user.username===username&&user.password===password);
+  let userisvalid=users.filter((user)=>{
+    return (user.username===username&&user.password===password);
+  })
   if(userisvalid>0){
     return true
   }
@@ -28,8 +32,19 @@ const authenticatedUser = (username,password)=>{
 
 //only registered users can login
 regd_users.post("/login", (req,res) => {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+ let username=req.body.username;
+ let password=req.body.password;
+ if(!username||!password){
+    res.status(404).json({message:"User Not Found!!!"});
+  }
+  else if(authenticatedUser(username,password)){
+    let accessToken=jwt.sign({data:password},'access',{expiresIn:60*60});
+    req.session.authorization={accessToken,username}
+    return res.status(200).json({message:"User logged in"})
+  }
+  else{
+    return res.status(404).json({message:"Invalid username and password!!!"});
+  }
 });
 
 // Add a book review

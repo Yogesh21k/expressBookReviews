@@ -6,18 +6,17 @@ const public_users = express.Router();
 
 
 public_users.post("/register", (req,res) => {
-  let username=req.body.username;
-  let password=req.body.password;
-  if(username&&password){
+  const username=req.body.username;
+  const password=req.body.password;
+  if(username && password){
     if(!isValid(username)){
-      users.push({"username":username,"password":password})
-      res.status(200).json({message: "User successfully registered. Now you can login"})
+      users.push({"username":username,"password":password});
+      return res.status(200).json({message:"User Added Successfully!!!Now you can log in"});
     }
     else{
-      res.status(404).json({message: "User already exists!"})
+      return res.status(404).json({message:"User already exists!!!"})
     }
   }
-  else
   res.status(404).json({message:"Unable to register User!!!"});
 });
 
@@ -34,14 +33,18 @@ public_users.get('/isbn/:isbn',function (req, res) {
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
-  let author=req.params.author;
-  const authorsBook=Object.values(books).filter((book)=>book.author===author);
-  if(authorsBook.length>0){
-      res.send(JSON.stringify(authorsBook,null,4));
-  }
-  else{
-      res.send("Unable to find the author");
-  }
+  let booksbyauthor = [];
+  let isbns = Object.keys(books);
+  isbns.forEach((isbn) => {
+    if (books[isbn]["author"] === req.params.author) {
+      booksbyauthor.push({
+        "isbn": isbn,
+        "title": books[isbn]["title"],
+        "reviews": books[isbn]["reviews"]
+      });
+    }
+  });
+  res.send(JSON.stringify({ booksbyauthor }, null, 4));
 });
 
 // Get all books based on title
