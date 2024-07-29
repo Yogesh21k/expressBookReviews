@@ -47,8 +47,15 @@ public_users.get('/title/:title',function (req, res) {
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const isbncode=req.params.isbn;
+    let filter_book=books[isbncode]
+    const reviewOfbook=filter_book.reviews
+    if(reviewOfbook){
+        res.send(reviewOfbook)
+    }
+    else{
+        res.send("Unable to find the title");
+    }
 });
 
 module.exports.general = public_users;
