@@ -1,6 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 let books = require("./booksdb.js");
+const e = require('express');
 const regd_users = express.Router();
 
 let users = [];
@@ -15,8 +16,14 @@ const isValid = (username)=>{
   }
 }
 
-const authenticatedUser = (username,password)=>{ //returns boolean
-//write code to check if username and password match the one we have in records.
+const authenticatedUser = (username,password)=>{ 
+  let userisvalid=users.filter((user)=>user.username===username&&user.password===password);
+  if(userisvalid>0){
+    return true
+  }
+  else{
+    return false
+  }
 }
 
 //only registered users can login
