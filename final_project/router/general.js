@@ -25,7 +25,7 @@ public_users.post("/register", (req,res) => {
 });
 
 /*
-// without promise/async 
+// Task 1-4 without promise/async 
 
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
@@ -66,21 +66,9 @@ public_users.get('/title/:title',function (req, res) {
   }
 });
 
-//  Get book review
-public_users.get('/review/:isbn',function (req, res) {
-  const isbncode=req.params.isbn;
-    let filter_book=books[isbncode];
-    const reviewOfbook=filter_book.reviews;
-    if(reviewOfbook){
-        res.send(reviewOfbook);
-    }
-    else{
-        res.send("Unable to find the title");
-    }
-});
 */
 
-// using Promises
+// Task 1-4 using Promises
 
 // Get all books
 const listBooks = async () => {
@@ -182,5 +170,17 @@ const getByTitle=async(title)=>{
     res.send(data);
   })
 
+//  Get book review
+public_users.get('/review/:isbn',function (req, res) {
+  const isbncode=req.params.isbn;
+    let filter_book=books[isbncode];
+    const reviewOfbook=filter_book.reviews;
+    if(reviewOfbook){
+        res.send(reviewOfbook);
+    }
+    else{
+        res.send("Unable to find the title");
+    }
+});
 
 module.exports.general = public_users;
